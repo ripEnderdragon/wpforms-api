@@ -15,6 +15,10 @@ admin.initializeApp({
 
 app.post("/wpforms", async (req, res) => {
   try {
+    if (req.headers['x-api-key'] !== 'MY_SECRET_KEY') {
+      return res.status(403).send("Unauthorized");
+    }
+
     const data = req.body;
 
     await admin.firestore().collection("wpforms_entries").add({
@@ -22,7 +26,7 @@ app.post("/wpforms", async (req, res) => {
       createdAt: new Date(),
     });
 
-    res.send("Saved to Firestore");
+    res.send("Saved");
   } catch (err) {
     res.status(500).send(err.toString());
   }
