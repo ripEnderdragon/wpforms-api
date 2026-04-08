@@ -7,7 +7,7 @@ app.use(cors());
 app.use(express.json());
 
 // 🔑 Load Firebase key (we'll add this later)
-const serviceAccount = require("./serviceAccountKey.json");
+const serviceAccount = require("/etc/secrets/serviceAccountKey.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
