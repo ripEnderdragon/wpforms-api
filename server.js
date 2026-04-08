@@ -28,4 +28,8 @@ app.post("/wpforms", async (req, res) => {
   }
 });
 
+app.get("/healthz", (req, res) => {
+  res.status(200).send("OK");
+});
+
 app.listen(3000, () => console.log("Server running"));
