@@ -6,12 +6,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-<<<<<<< HEAD
-
-const serviceAccount = require("/etc/secrets/serviceAccountKey.json");
-=======
 const serviceAccount = require("./serviceAccountKey.json");
->>>>>>> 2ff9abb (adj gcld run)
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -36,16 +31,8 @@ app.post("/wpforms", async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
-app.get("/healthz", (req, res) => {
-  res.status(200).send("OK");
-});
-
-app.listen(3000, () => console.log("Server running"));
-=======
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on ${PORT}`);
 });
->>>>>>> 2ff9abb (adj gcld run)
