@@ -10,10 +10,24 @@ app.use(cors());
 app.use(express.json());
 
 try {
-  admin.initializeApp();
+
+  const serviceAccount = JSON.parse(
+    Buffer.from(
+      process.env.FIREBASE_SERVICE_ACCOUNT,
+      "base64"
+    ).toString("utf8")
+  );
+
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+
   console.log("Firebase initialized");
+
 } catch (err) {
+
   console.error("Firebase initialization failed:", err);
+
 }
 
 app.get("/", (req, res) => {
@@ -27,7 +41,10 @@ app.get("/health", (req, res) => {
 });
 
 app.post("/wpforms", async (req, res) => {
+
   try {
+
+    console.log("BODY:", JSON.stringify(req.body, null, 2));
 
     if (req.headers["x-api-key"] !== process.env.API_KEY) {
       return res.status(403).send("Unauthorized");
@@ -36,9 +53,9 @@ app.post("/wpforms", async (req, res) => {
     const payload = req.body;
 
     await admin.firestore().collection("wpforms_entries").add({
-      form_id: payload.form_id,
-      entry_id: payload.entry_id,
-      data: payload.data,
+      form_id: payload.form_id || null,
+      entry_id: payload.entry_id || null,
+      data: payload.data || payload,
       createdAt: new Date(),
     });
 
@@ -55,6 +72,7 @@ app.post("/wpforms", async (req, res) => {
     });
 
   }
+
 });
 
 const PORT = process.env.PORT || 8080;
